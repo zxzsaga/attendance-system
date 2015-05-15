@@ -1,0 +1,47 @@
+extend layout
+
+append body
+  .container
+    .row
+      .col-lg-3
+        //
+          .panel.panel-default
+            .panel-heading
+              h3.panel-title
+                | 申请
+            .panel-body
+              a
+                | 申请假期
+      .col-lg-6
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title 最新申请
+          .panel-body
+            - console.log('---------');
+            - console.log(absences);
+            if (absences && absences.length)
+              table.table
+                tr
+                  th 学生
+                  th 开始时间
+                  th 结束时间
+                  th 原因
+                each absence in absences
+                  tr
+                    td #{ absence.absentee }
+                    td #{ absence.startTime }
+                    td #{ absence.endTime }
+                    td #{ absence.reason }
+      .col-lg-3
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title
+              | 班级
+          .panel-body
+            table.table
+              tr
+                th 班级名
+              if classes
+                each class_ in classes
+                  tr
+                    th #{ class_.name }

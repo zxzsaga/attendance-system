@@ -1,0 +1,27 @@
+extend layout
+
+append body
+  .container
+    .row
+      .col-sm-3
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title 申请
+          .panel-body
+            a(href='/student/newAbsence') 申请假期
+      .col-sm-6
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title 申请列表
+          .panel-body
+            if (absences && absences.length)
+              table.table
+                tr
+                  th 开始时间
+                  th 结束时间
+                  th 原因
+                each absence in absences
+                  tr
+                    td #{ absence.startTime }
+                    td #{ absence.endTime }
+                    td #{ absence.reason }
