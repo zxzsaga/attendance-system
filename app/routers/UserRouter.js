@@ -118,7 +118,6 @@ UserRouter.post('/register', function(req, res) {
             return;
         }
 
-
         var user = new User(userParams);
         user.save(function(err, user) {
             if (err) {
@@ -133,7 +132,6 @@ UserRouter.post('/register', function(req, res) {
             };
             res.redirect('/');
         });
-
     });
 });
 

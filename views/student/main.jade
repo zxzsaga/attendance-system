@@ -9,7 +9,12 @@ append body
             h3.panel-title 申请
           .panel-body
             a(href='/student/newAbsence') 申请假期
-      .col-sm-6
+            hr
+            if checked
+              p 已签到
+            else
+              a(href='/student/checkDailyAttenDance') 签到
+      .col-sm-9
         .panel.panel-default
           .panel-heading
             h3.panel-title 申请列表
@@ -20,8 +25,21 @@ append body
                   th 开始时间
                   th 结束时间
                   th 原因
+                  th 审批状态
+                  th 操作
                 each absence in absences
                   tr
                     td #{ absence.startTime }
                     td #{ absence.endTime }
                     td #{ absence.reason }
+                    td #{ absence.approved ? '通过' : '未通过' }
+                    td
+                      if !absence.approved
+                        .btn-group
+                          .button.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='false')
+                            | 删/改 
+                            span.caret
+                          ul.dropdown-menu(role='menu')
+                            li
+                              a(href='/student/editAbsence/#{absence.id}') 修改
+                              a(href='/student/removeAbsence/#{absence.id}') 删除

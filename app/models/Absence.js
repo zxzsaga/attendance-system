@@ -25,6 +25,10 @@ var definition = {
     reason: {
         type: String,
         required: true
+    },
+    approved: {
+        type: Boolean,
+        required: false
     }
 };
 

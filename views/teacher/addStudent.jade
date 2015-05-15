@@ -1,0 +1,30 @@
+extend layout
+
+append body
+  .container
+    .row
+      .col-sm-3
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title 查询
+          .panel-body
+            a(href='/teacher') 请假查询
+            hr
+            a(href='/teacher/dailyAttendanceIndex') 签到查询
+      .col-sm-9
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title 添加学生
+          .panel-body
+            form.form-horizontal(action='/teacher/addStudent', method='post', role='form')
+              .form-group
+                label.col-sm-2.control-label(for='usr') 姓名
+                .col-sm-6
+                  input.form-control#usr(name='name', type='text', placeholder='Username')
+              .form-group
+                label.col-sm-2.control-label(for='pwd') 密码
+                .col-sm-6
+                  input.form-control#pwd(name='pwd', type='password', placeholder='Password')
+              .form-group
+                .col-sm-offset-2.col-sm-6
+                  button(type="submit" class="btn btn-default") 确定
