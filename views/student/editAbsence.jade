@@ -26,7 +26,7 @@ append body
                 .col-sm-9
                   input.form-control#endTime(type='text', name='endTime', placeholder='2015-12-31 23:59', value = absence && absence.endTime)
               .form-group
-                label.col-sm-3.control-label(for='reason') 事由
+                label.col-sm-3.control-label(for='reason') 原因
                 .col-sm-9
                   textarea.form-control#reason(rows=5, name='reason') #{ absence && absence.reason }
               .form-group
