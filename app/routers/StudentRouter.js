@@ -15,7 +15,7 @@ StudentRouter.get('/', function(req, res) {
     var userId = req.session.user.id;
     var todayDate = moment().format('YYYYMMDD');
 
-    Absence.find({ absentee: mongoose.Types.ObjectId(userId) }).sort({ startTime: -1 }).limit(10).exec(function(err, absences) {
+    Absence.find({ absentee: userId }).sort({ startTime: -1 }).limit(10).exec(function(err, absences) {
         if (err) {
             console.error(err);
             res.send('find absence error');
@@ -42,10 +42,10 @@ StudentRouter.get('/', function(req, res) {
                 return;
             }
             if (dailyAttendance) {
-                res.render('student/main.jade', { absences: absencesToResponse, checked: true });
+                res.render('student/main.jade', { absences: absencesToResponse, user: req.session.user, checked: true });
                 return;
             }
-            res.render('student/main.jade', { absences: absencesToResponse });
+            res.render('student/main.jade', { absences: absencesToResponse, user: req.session.user });
         });
     });
 });

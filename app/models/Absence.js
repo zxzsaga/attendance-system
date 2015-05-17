@@ -11,7 +11,7 @@ util.inherits(Schema, BaseSchema);
 
 var definition = {
     absentee: {
-        type: ObjectId,
+        type: String,
         required: true
     },
     startTime: {

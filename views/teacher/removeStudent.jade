@@ -11,6 +11,14 @@ append body
             a(href='/teacher') 请假查询
             hr
             a(href='/teacher/dailyAttendanceIndex') 签到查询
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title 个人信息
+          .panel-body
+            p 姓名: #{ user.name }
+            p 性别: #{ user.gender === 'female' ? '女' : '男' }
+            p 工号: #{ user.id }
+
       .col-sm-9
         .panel.panel-default
           .panel-heading
@@ -18,9 +26,9 @@ append body
           .panel-body
             form.form-horizontal(action='/teacher/removeStudent', method='post', role='form')
               .form-group
-                label.col-sm-2.control-label(for='usr') 姓名
+                label.col-sm-2.control-label(for='id') 姓名
                 .col-sm-6
-                  input.form-control#usr(name='name', type='text', placeholder='Username')
+                  input.form-control#usr(name='id', type='text', placeholder='学号')
               .form-group
                 .col-sm-offset-2.col-sm-6
                   button(type="submit" class="btn btn-default") 确定

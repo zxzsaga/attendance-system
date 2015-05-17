@@ -14,10 +14,18 @@ html
         form.form-horizontal.col-lg-4.col-lg-offset-4(action='/register', method='POST', role='form')
           .form-group
             .col-lg-12
-              input.form-control.input-lg(name='name', type='text', placeholder='Username')
+              input.form-control.input-lg(name='id', type='text', placeholder='学号')
           .form-group
             .col-lg-12
-              input.form-control.input-lg(name='pwd', type='password', placeholder='Password')
+              input.form-control.input-lg(name='name', type='text', placeholder='姓名')
+          .form-group
+            .col-lg-12
+              select.form-control(name='gender')
+                option(value='male') 男
+                option(value='female') 女
+          .form-group
+            .col-lg-12
+              input.form-control.input-lg(name='pwd', type='password', placeholder='密码')
           if error
             .form-group
               .col-lg-8.col-lg-offset-2.alert.alert-danger

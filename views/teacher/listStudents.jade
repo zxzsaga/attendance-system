@@ -11,11 +11,27 @@ append body
             a(href='/teacher') 请假查询
             hr
             a(href='/teacher/dailyAttendanceIndex') 签到查询
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title 个人信息
+          .panel-body
+            p 姓名: #{ user.name }
+            p 性别: #{ user.gender === 'female' ? '女' : '男' }
+            p 工号: #{ user.id }
+
       .col-sm-9
         .panel.panel-default
           .panel-heading
             h3.panel-title 学生列表
           .panel-body
             if (students)
-              each name in students
-                p #{ name }
+              table.table
+                tr
+                  th 学号
+                  th 姓名
+                  th 性别
+                each student in students
+                  tr
+                    td #{ student._id }
+                    td #{ student.name }
+                    td #{ student.gender === 'female' ? '女' : '男' }

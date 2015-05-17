@@ -11,6 +11,14 @@ append body
             a(href='/teacher') 请假查询
             hr
             a(href='/teacher/dailyAttendanceIndex') 签到查询
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title 个人信息
+          .panel-body
+            p 姓名: #{ user.name }
+            p 性别: #{ user.gender === 'female' ? '女' : '男' }
+            p 工号: #{ user.id }
+
       .col-sm-9
         .panel.panel-default
           .panel-heading

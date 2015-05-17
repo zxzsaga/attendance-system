@@ -29,7 +29,6 @@ TeacherRouter.get('/', function(req, res) {
                     absenteeIds.push(absence.absentee);
                 }
             });
-
             User.find({ _id: { $in: absenteeIds } }).exec(function(err, users) {
                 users.forEach(function(user) {
                     absenteeIdNameMap[user.id] = user.name;
@@ -45,8 +44,10 @@ TeacherRouter.get('/', function(req, res) {
                     }
                     absencesToResponse.push(newAbsence);
                 });
-                res.render('teacher/main.jade', { absences: absencesToResponse });
+                res.render('teacher/main.jade', { absences: absencesToResponse, user: req.session.user });
             });
+        } else {
+            res.render('teacher/main.jade', { absences: [], user: req.session.user });
         }
     });
 });
@@ -72,7 +73,7 @@ TeacherRouter.get('/approveAbsence/:absenceId', function(req, res) {
 });
 
 TeacherRouter.get('/dailyAttendanceIndex', function(req, res) {
-    res.render('teacher/dailyAttendanceIndex.jade');
+    res.render('teacher/dailyAttendanceIndex.jade', { user: req.session.user  });
 });
 
 TeacherRouter.post('/findDailyAttendance', function(req, res) {
@@ -86,31 +87,48 @@ TeacherRouter.post('/findDailyAttendance', function(req, res) {
         }
 
         if (!dailyAttendance) {
-            res.render('teacher/dailyAttendanceIndex.jade', { date: date });
+            res.render('teacher/dailyAttendanceIndex.jade', { date: date, user: req.session.user });
             return;
         }
 
-        User.find({ _id: { $nin: dailyAttendance.attendance }, type: 'student' }, { name: 1 }).exec(function(err, users) {
+        User.find({type: { $ne: 'teacher' }}, { name: 1, gender: 1 }).exec(function(err, users) {
             if (err) {
                 console.error(err);
                 res.send('find user error');
                 return;
             }
-            var userNames = users.map(function(user) { return user.name; });
-            res.render('teacher/dailyAttendanceIndex.jade', { date: date, uncheckedList: userNames });
+
+            var checkedList = [];
+            var uncheckedList = [];
+            users.forEach(function(user) {
+                if (dailyAttendance.attendance.indexOf(user._id) < 0) {
+                    uncheckedList.push(user);
+                } else {
+                    checkedList.push(user);
+                }
+            })
+
+            res.render('teacher/dailyAttendanceIndex.jade', {
+                date: date,
+                uncheckedList: uncheckedList,
+                checkedList: checkedList,
+                user: req.session.user
+            });
         })
     });
 });
 
 TeacherRouter.get('/addStudent', function(req, res) {
-    res.render('teacher/addStudent.jade');
+    res.render('teacher/addStudent.jade', { user: req.session.user });
 });
 TeacherRouter.post('/addStudent', function(req, res) {
     var userParams = {
+        _id: req.body.id,
         name: req.body.name,
-        pwd: req.body.pwd
+        pwd: req.body.pwd,
+        gender: req.body.gender
     };
-    User.findOne({ name: userParams.name }, function(err, user) {
+    User.findOne({ _id: userParams._id }, function(err, user) {
         if (err) {
             console.error(err);
             res.send('find user error');
@@ -118,7 +136,7 @@ TeacherRouter.post('/addStudent', function(req, res) {
         }
 
         if (user) {
-            res.render('register.jade', { error: 'Username already exist.' });
+            res.send('学号已被注册');
             return;
         }
 
@@ -135,15 +153,19 @@ TeacherRouter.post('/addStudent', function(req, res) {
 });
 
 TeacherRouter.get('/removeStudent', function(req, res) {
-    res.render('teacher/removeStudent.jade');
+    res.render('teacher/removeStudent.jade', { user: req.session.user });
 });
 
 TeacherRouter.post('/removeStudent', function(req, res) {
-    var name = req.body.name;
-    User.findOne({ name: name, type: { $ne: 'teacher' } }, function(err, user) {
+    var id = req.body.id;
+    User.findOne({ _id: id, type: { $ne: 'teacher' } }, function(err, user) {
         if (err) {
             console.error(err);
             res.send('remove user error');
+            return;
+        }
+        if (!user) {
+            res.send('没有这个学号的学生');
             return;
         }
         var userId = user._id;
@@ -159,21 +181,20 @@ TeacherRouter.post('/removeStudent', function(req, res) {
                     res.send('remove absence error');
                     return;
                 }
-                res.redirect('/');
+                res.redirect('/teacher/listStudents');
             });
         });
     })
 });
 
 TeacherRouter.get('/listStudents', function(req, res) {
-    User.find({ type: { $ne: 'teacher' } }, { name: 1 }, function(err, users) {
+    User.find({ type: { $ne: 'teacher' } }, { name: 1, gender: 1 }, function(err, users) {
         if (err) {
             console.error(err);
             res.send('find user error');
             return;
         }
-        var nameList = users.map(function(user) { return user.name });
-        res.render('teacher/listStudents.jade', { students: nameList });
+        res.render('teacher/listStudents.jade', { students: users, user: req.session.user });
     });
 });
 

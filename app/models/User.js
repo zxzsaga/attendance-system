@@ -9,17 +9,25 @@ function Schema(definition, options) {
 util.inherits(Schema, BaseSchema);
 
 var definition = {
-    name: {
+    _id: {
         type: String,
         required: true
     },
-    pwd: {
+    name: {
         type: String,
         required: true
     },
     type: {
         type: String,
         default: 'student'
+    },
+    gender: {
+        type: String,
+        required: false
+    },
+    pwd: {
+        type: String,
+        required: true
     }
 };
 
